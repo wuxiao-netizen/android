@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <!-- ==================== 权限声明 ==================== -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_SMS" />
+  <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+  <!-- 读取电话状态 (包含读取手机号) -->
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+  <!-- Android 8.0+ 读取手机号码需要单独声明 -->
+  <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+
+  <!-- ✅ 发送短信权限 (发送短信必需) -->
+  <uses-permission android:name="android.permission.SEND_SMS" />
+
+  <!-- ✅ 可选: 精确的电话状态 (Android 12+) -->
+  <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE"
+    android:maxSdkVersion="32" />
+
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    android:usesCleartextTraffic="true">
+
+    <!-- ==================== MainActivity (必需!) ==================== -->
+    <activity
+      android:name=".MainActivity"
+      android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+      android:label="@string/title_activity_main"
+      android:launchMode="singleTask"
+      android:exported="true"
+      android:theme="@style/AppTheme.NoActionBarLaunch">
+
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+    </activity>
+
+    <!-- ==================== 通知监听服务 ==================== -->
+    <service
+      android:name=".SmsNotificationListener"
+      android:label="SMS Auto Fill"
+      android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+      android:exported="true"
+      android:enabled="true">
+      <intent-filter>
+        <action android:name="android.service.notification.NotificationListenerService" />
+      </intent-filter>
+    </service>
+
+    <!-- ==================== Provider (Capacitor 必需) ==================== -->
+    <provider
+      android:name="androidx.core.content.FileProvider"
+      android:authorities="${applicationId}.fileprovider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+    </provider>
+
+  </application>
+
+</manifest>
